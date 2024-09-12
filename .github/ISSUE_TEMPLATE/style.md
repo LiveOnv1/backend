@@ -1,7 +1,7 @@
 ---
 name: style
 about: 코드 포맷팅, 세미콜론 누락 등
-title: ''
+title: 'style: '
 labels: style
 assignees: ''
 

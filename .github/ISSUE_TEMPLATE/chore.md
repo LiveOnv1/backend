@@ -1,7 +1,7 @@
 ---
 name: chore
 about: 빌드 작업, 패키지 매니저 설정 등
-title: ''
+title: 'chore: '
 labels: chore
 assignees: ''
 

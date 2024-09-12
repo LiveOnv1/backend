@@ -1,7 +1,7 @@
 ---
 name: test
 about: 테스트 코드 추가/수정
-title: ''
+title: 'test: '
 labels: test
 assignees: ''
 
