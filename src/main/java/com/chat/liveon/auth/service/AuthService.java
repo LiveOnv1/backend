@@ -5,6 +5,7 @@ import com.chat.liveon.auth.dto.RegisterRequest;
 import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,12 @@ public class AuthService {
     }
 
     @Transactional
-    public void login(LoginRequest loginRequest) {
+    public void login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         boolean isAuthenticated = authenticate(loginRequest.personId(), loginRequest.personPassword());
         if (!isAuthenticated) {
             throw new AuthenticationFailureException("로그인에 실패했습니다.");
         }
-            HttpSession session = loginRequest.request().getSession(true);
+            HttpSession session = request.getSession(true);
             session.setAttribute("personId", loginRequest.personId());
 
             String sessionId = session.getId();
@@ -49,8 +50,8 @@ public class AuthService {
             sessionCookie.setPath("/");
             sessionCookie.setMaxAge(60 * 60);
 
-            loginRequest.response().addCookie(sessionCookie);
-            loginRequest.response().setStatus(HttpServletResponse.SC_OK);
+            response.addCookie(sessionCookie);
+            response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Transactional

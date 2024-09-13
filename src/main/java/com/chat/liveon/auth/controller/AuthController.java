@@ -5,6 +5,8 @@ import com.chat.liveon.auth.dto.RegisterRequest;
 import com.chat.liveon.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +37,9 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 요청")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         log.info("[로그인 요청] 아이디: {}", loginRequest.personId());
-        authService.login(loginRequest);
+        authService.login(loginRequest, request, response);
         log.info("[로그인 성공] 아이디: {}", loginRequest.personId());
         return ResponseEntity.ok("로그인 성공");
     }
@@ -47,7 +49,6 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpSession session) {
         log.info("[로그아웃 요청] 아이디: {}", session.getAttribute("personId"));
         authService.logout(session);
-        log.info("[로그아웃 성공] 아이디: {}", session.getAttribute("personId"));
         return ResponseEntity.ok("로그아웃 성공");
     }
 
