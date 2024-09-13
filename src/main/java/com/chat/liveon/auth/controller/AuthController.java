@@ -3,6 +3,7 @@ package com.chat.liveon.auth.controller;
 import com.chat.liveon.auth.dto.LoginRequest;
 import com.chat.liveon.auth.dto.RegisterRequest;
 import com.chat.liveon.auth.service.AuthService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    public AuthController(final AuthService personService) {
-        this.authService = personService;
+    public AuthController(final AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/register")
@@ -28,14 +29,20 @@ public class AuthController {
         return ResponseEntity.ok("가입 성공");
     }
 
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        log.info("[로그인 요청] 이메일: {}", loginRequest.personId());
+        log.info("[로그인 요청] 아이디: {}", loginRequest.personId());
         authService.login(loginRequest);
-        log.info("[로그인 성공] 이메일: {}", loginRequest.personId());
+        log.info("[로그인 성공] 아이디: {}", loginRequest.personId());
         return ResponseEntity.ok("로그인 성공");
-    }*/
+    }
 
-
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        log.info("[로그아웃 요청] 아이디: {}", session.getAttribute("personId"));
+        authService.logout(session);
+        log.info("[로그아웃 성공] 아이디: {}", session.getAttribute("personId"));
+        return ResponseEntity.ok("로그아웃 성공");
+    }
 
 }

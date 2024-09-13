@@ -6,8 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +25,6 @@ public class Person {
     }
 
     public Person() {
-
     }
+
 }
