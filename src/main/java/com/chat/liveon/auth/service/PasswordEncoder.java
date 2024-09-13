@@ -1,4 +1,4 @@
-package com.chat.liveon.config;
+package com.chat.liveon.auth.service;
 
 import org.springframework.stereotype.Component;
 
