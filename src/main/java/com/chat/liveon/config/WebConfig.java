@@ -10,5 +10,4 @@ public class WebConfig {
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder();
     }
-
 }
