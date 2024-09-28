@@ -3,6 +3,7 @@ package com.chat.liveon.auth.service;
 import com.chat.liveon.auth.dto.LoginRequest;
 import com.chat.liveon.auth.dto.RegisterRequest;
 import com.chat.liveon.auth.entity.Person;
+import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class AuthService {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }
         String encodedPassword = passwordEncoder.encrypt(authRequest.personId(), authRequest.personPassword());
-        Person person = new Person(authRequest.personId(), authRequest.personName(), encodedPassword);
+        Person person = new Person(authRequest.personId(), authRequest.personName(), encodedPassword, Role.ROLE_USER);
         personRepository.save(person);
     }
 

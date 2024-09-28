@@ -17,11 +17,13 @@ public class Person {
     private String personId;
     private String personName;
     private String personPassword;
+    private Role role;
 
-    public Person(String personId, String personName, String encodedPassword) {
+    public Person(String personId, String personName, String encodedPassword, Role role) {
         this.personId = personId;
         this.personName = personName;
         this.personPassword = encodedPassword;
+        this.role = Role.ROLE_USER;
     }
 
     public Person() {
