@@ -31,7 +31,7 @@ public class AuthService {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }
         String encodedPassword = passwordEncoder.encrypt(authRequest.personId(), authRequest.personPassword());
-        Person person = new Person(authRequest.personId(), authRequest.personName(), encodedPassword, Role.ROLE_USER);
+        Person person = new Person(authRequest.personId(), authRequest.personName(), encodedPassword, Role.ROLE_USER, authRequest.profilePicture());
         personRepository.save(person);
     }
 

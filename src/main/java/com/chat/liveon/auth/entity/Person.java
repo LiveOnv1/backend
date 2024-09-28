@@ -18,12 +18,14 @@ public class Person {
     private String personName;
     private String personPassword;
     private Role role;
+    private String profilePicture;
 
-    public Person(String personId, String personName, String encodedPassword, Role role) {
+    public Person(String personId, String personName, String encodedPassword, Role role, String profilePicture) {
         this.personId = personId;
         this.personName = personName;
         this.personPassword = encodedPassword;
         this.role = Role.ROLE_USER;
+        this.profilePicture = profilePicture;
     }
 
     public Person() {
