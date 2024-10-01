@@ -6,15 +6,18 @@ import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+@Slf4j
 @Service
 public class AuthService {
     private final PasswordEncoder passwordEncoder;
@@ -43,10 +46,9 @@ public class AuthService {
         }
             HttpSession session = request.getSession(true);
             session.setAttribute("personId", loginRequest.personId());
-
             String sessionId = session.getId();
 
-            jakarta.servlet.http.Cookie sessionCookie = new jakarta.servlet.http.Cookie("SESSIONID", sessionId);
+            Cookie sessionCookie = new Cookie("JSESSIONID", sessionId);
             sessionCookie.setHttpOnly(true);
             sessionCookie.setPath("/");
             sessionCookie.setMaxAge(60 * 60);

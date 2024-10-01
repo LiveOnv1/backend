@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @Slf4j
-@Tag(name = "Auth API", description = "가입, 로그인, 로그이웃 API")
+@Tag(name = "Auth API", description = "가입, 로그인, 로그아웃 API")
 public class AuthController {
     private final AuthService authService;
 
