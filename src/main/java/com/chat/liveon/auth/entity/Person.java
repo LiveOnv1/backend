@@ -1,19 +1,23 @@
 package com.chat.liveon.auth.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.chat.liveon.chat.entity.ChatMessage;
+import com.chat.liveon.chat.entity.ChatRoom;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
     private String personId;
     private String personName;
     private String personPassword;
@@ -27,8 +31,4 @@ public class Person {
         this.role = Role.ROLE_USER;
         this.profilePicture = profilePicture;
     }
-
-    public Person() {
-    }
-
 }
