@@ -3,6 +3,7 @@ package com.chat.liveon.chat.service;
 import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.repository.PersonRepository;
 import com.chat.liveon.chat.dto.request.ChatRoomRequest;
+import com.chat.liveon.chat.dto.response.AllChatRoomResponse;
 import com.chat.liveon.chat.dto.response.ChatRoomResponse;
 import com.chat.liveon.chat.entity.ChatRoom;
 import com.chat.liveon.chat.repository.ChatMessageRepository;
@@ -10,6 +11,9 @@ import com.chat.liveon.chat.repository.ChatRoomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,5 +40,13 @@ public class ChatRoomService {
         chatRoom = chatRoomRepository.save(chatRoom);
         log.info("[채팅방 생성 성공] 사용자: {}, 채팅방 명: {}", person, chatRoomRequest.chatRoomName());
         return new ChatRoomResponse(chatRoom.getId(), chatRoomRequest.chatRoomName(), personId.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<AllChatRoomResponse> getAllChatRoom() {
+        List<ChatRoom> chatRooms = chatRoomRepository.findAll();
+        return chatRooms.stream()
+                .map(chatRoom -> new AllChatRoomResponse(chatRoom.getId(), chatRoom.getChatRoomName()))
+                .collect(Collectors.toList());
     }
 }
