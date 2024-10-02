@@ -7,8 +7,10 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ChatMessageController {
 
@@ -17,7 +19,7 @@ public class ChatMessageController {
     @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/public/{roomId}")
     public ChatMessageRequest sendMessage(@DestinationVariable Long roomId, ChatMessageRequest message) {
-        return message;
+        return chatMessageService.sendMessage(roomId, message);
     }
 
 }

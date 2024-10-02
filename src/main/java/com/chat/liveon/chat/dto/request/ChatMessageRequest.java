@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 public record ChatMessageRequest(
         Long messageId,
         Long chatRoomId,
-        Long senderId,
+        String senderName,
         String message,
-        LocalDateTime timestamp,
-        String profileImageUrl
+        LocalDateTime timestamp
 ) {}

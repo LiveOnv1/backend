@@ -8,13 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @Tag(name = "ChatRoom API", description = "채팅방 API")
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -28,7 +26,6 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoomResponse> createChatRoom(@RequestBody ChatRoomRequest chatRoomRequest,
                                                            HttpSession session) {
         String personId = (String) session.getAttribute("personId");
-        log.info("[채팅방 생성 요청] 사용자: {}", personId);
         ChatRoomResponse response = chatRoomService.createChatRoom(chatRoomRequest, personId);
         return ResponseEntity.ok(response);
     }
