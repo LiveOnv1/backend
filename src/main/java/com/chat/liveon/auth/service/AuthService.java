@@ -1,7 +1,8 @@
 package com.chat.liveon.auth.service;
 
-import com.chat.liveon.auth.dto.LoginRequest;
-import com.chat.liveon.auth.dto.RegisterRequest;
+import com.chat.liveon.auth.dto.request.LoginRequest;
+import com.chat.liveon.auth.dto.request.RegisterRequest;
+import com.chat.liveon.auth.dto.response.LoginResponse;
 import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
-@Slf4j
 @Service
 public class AuthService {
     private final PasswordEncoder passwordEncoder;
@@ -39,7 +39,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public LoginResponse login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         boolean isAuthenticated = authenticate(loginRequest.personId(), loginRequest.personPassword());
         if (!isAuthenticated) {
             throw new AuthenticationFailureException("로그인에 실패했습니다.");
@@ -55,6 +55,7 @@ public class AuthService {
 
             response.addCookie(sessionCookie);
             response.setStatus(HttpServletResponse.SC_OK);
+            return new LoginResponse(loginRequest.personId());
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package com.chat.liveon.chat.service;
 import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.repository.PersonRepository;
 import com.chat.liveon.chat.dto.request.ChatMessageRequest;
+import com.chat.liveon.chat.dto.response.ChatMessageResponse;
 import com.chat.liveon.chat.entity.ChatMessage;
 import com.chat.liveon.chat.entity.ChatRoom;
 import com.chat.liveon.chat.repository.ChatMessageRepository;
@@ -22,12 +23,11 @@ public class ChatMessageService {
     private final PersonRepository personRepository;
 
     @Transactional
-    public ChatMessageRequest sendMessage(Long roomId, ChatMessageRequest messageRequest) {
+    public ChatMessageResponse sendMessage(Long roomId, ChatMessageRequest messageRequest) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("ChatRoom not found"));
-
-        Person sender = personRepository.findByPersonId(messageRequest.senderName())
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
+                .orElseThrow(() -> new RuntimeException("채팅방이 없음: " + roomId));
+        Person sender = personRepository.findByPersonId(messageRequest.personId())
+                .orElseThrow(() -> new RuntimeException("사용자가 없음: " + messageRequest.personId()));
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoom(chatRoom)
@@ -37,15 +37,15 @@ public class ChatMessageService {
 
         chatMessage = chatMessageRepository.save(chatMessage);
 
-        log.info("[메시지 전송 성공] 채팅방: {}, 사용자: {}, 메시지: {}", roomId, sender.getPersonName(), messageRequest.message());
+        log.info("[메시지 전송 성공] 채팅방: {}, 사용자: {}, 메시지: {}, 시간: {}", roomId, sender.getPersonId(), messageRequest.message(), chatMessage.getSendDate());
 
-        return new ChatMessageRequest(
-                chatMessage.getId(),
+        return new ChatMessageResponse(
                 chatMessage.getChatRoom().getId(),
-                sender.getPersonName(),
+                sender.getPersonId(),
                 chatMessage.getMessage(),
                 chatMessage.getSendDate()
         );
-
     }
+
+
 }

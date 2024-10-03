@@ -1,7 +1,8 @@
 package com.chat.liveon.auth.controller;
 
-import com.chat.liveon.auth.dto.LoginRequest;
-import com.chat.liveon.auth.dto.RegisterRequest;
+import com.chat.liveon.auth.dto.request.LoginRequest;
+import com.chat.liveon.auth.dto.request.RegisterRequest;
+import com.chat.liveon.auth.dto.response.LoginResponse;
 import com.chat.liveon.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,11 +38,11 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 요청")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         log.info("[로그인 요청] 아이디: {}", loginRequest.personId());
-        authService.login(loginRequest, request, response);
+        LoginResponse loginResponse = authService.login(loginRequest, request, response);
         log.info("[로그인 성공] 아이디: {}", loginRequest.personId());
-        return ResponseEntity.ok("로그인 성공");
+        return loginResponse;
     }
 
     @PostMapping("/logout")
