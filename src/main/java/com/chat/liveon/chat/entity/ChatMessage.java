@@ -36,13 +36,4 @@ public class ChatMessage {
         this.chatRoom = chatRoom;
         this.sendDate = LocalDateTime.now();
     }
-
-    public static ChatMessage createChatMessage(Person sender, String message, ChatRoom chatRoom) {
-        ChatMessage chatMessage = ChatMessage.builder()
-                .sender(sender)
-                .message(message)
-                .chatRoom(chatRoom)
-                .build();
-        return chatMessage;
-    }
 }
