@@ -27,8 +27,8 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
     @Operation(summary = "회원 가입", description = "가입 요청, 등록")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest authRequest) {
         log.info("[가입 요청] 아이디: {} / 이름: {}", authRequest.personId(), authRequest.personName());
         authService.register(authRequest);
@@ -36,8 +36,8 @@ public class AuthController {
         return ResponseEntity.ok("가입 성공");
     }
 
-    @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 요청")
+    @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         log.info("[로그인 요청] 아이디: {}", loginRequest.personId());
         LoginResponse loginResponse = authService.login(loginRequest, request, response);
@@ -45,8 +45,8 @@ public class AuthController {
         return loginResponse;
     }
 
-    @PostMapping("/logout")
     @Operation(summary = "로그아웃", description = "로그아웃 요청")
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         log.info("[로그아웃 요청] 아이디: {}", session.getAttribute("personId"));
         authService.logout(session);

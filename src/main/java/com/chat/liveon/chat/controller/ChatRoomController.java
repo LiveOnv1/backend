@@ -21,8 +21,8 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    @PostMapping("/chat-room")
     @Operation(summary = "채팅방 생성 API")
+    @PostMapping("/chat-room")
     public ResponseEntity<ChatRoomResponse> createChatRoom(@RequestBody ChatRoomRequest chatRoomRequest,
                                                            HttpSession session) {
         String personId = (String) session.getAttribute("personId");
@@ -30,8 +30,8 @@ public class ChatRoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/chat-room")
     @Operation(summary = "채팅방 조회 API")
+    @GetMapping("/chat-room")
     public ResponseEntity<List<AllChatRoomResponse>> getChatRoom() {
         List<AllChatRoomResponse> response = chatRoomService.getAllChatRoom();
         return ResponseEntity.ok(response);

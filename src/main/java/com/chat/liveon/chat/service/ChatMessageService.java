@@ -10,8 +10,14 @@ import com.chat.liveon.chat.repository.ChatMessageRepository;
 import com.chat.liveon.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,16 +42,27 @@ public class ChatMessageService {
                 .build();
 
         chatMessage = chatMessageRepository.save(chatMessage);
-
-        log.info("[메시지 전송 성공] 채팅방: {}, 사용자: {}, 메시지: {}, 시간: {}", roomId, sender.getPersonId(), messageRequest.message(), chatMessage.getSendDate());
+        log.info("[메시지 전송 성공] 채팅방: {}, 사용자: {}, 메시지: {}", roomId, sender.getPersonName(), messageRequest.message());
 
         return new ChatMessageResponse(
                 chatMessage.getChatRoom().getId(),
-                sender.getPersonId(),
+                sender.getPersonName(),
                 chatMessage.getMessage(),
                 chatMessage.getSendDate()
         );
     }
 
+    @Transactional(readOnly = true)
+    public List<ChatMessageResponse> getMessagesByRoomId(Long roomId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ChatMessage> messagesPage = chatMessageRepository.findByChatRoom_IdOrderBySendDateDesc(roomId, pageable);
 
+        return messagesPage.stream()
+                .map(message -> new ChatMessageResponse(
+                        message.getChatRoom().getId(),
+                        message.getSender().getPersonName(),
+                        message.getMessage(),
+                        message.getSendDate()))
+                .collect(Collectors.toList());
+    }
 }
