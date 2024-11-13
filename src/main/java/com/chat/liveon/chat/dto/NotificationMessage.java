@@ -1,4 +1,6 @@
 package com.chat.liveon.chat.dto;
 
-public class NotificationMessage {
-}
+public record NotificationMessage(
+        Long chatRoomId,
+        Long unreadCount
+) {}

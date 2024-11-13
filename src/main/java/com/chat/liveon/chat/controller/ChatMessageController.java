@@ -10,10 +10,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,7 @@ public class ChatMessageController {
     @SendTo("/topic/chatroom/{roomId}")
     public ChatMessageResponse sendMessage(@DestinationVariable("roomId") String roomId, ChatMessageRequest message) {
         Long roomIdLong = Long.parseLong(roomId);
+
         return chatMessageService.sendMessage(roomIdLong, message);
     }
 
@@ -35,6 +33,7 @@ public class ChatMessageController {
     @GetMapping("/chat-room/{roomId}/messages")
     public ResponseEntity<List<ChatMessageResponse>> getChatMessages(@PathVariable("roomId") Long roomId, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size) {
         List<ChatMessageResponse> messages = chatMessageService.getMessagesByRoomId(roomId, page, size);
+
         return ResponseEntity.ok(messages);
     }
 }

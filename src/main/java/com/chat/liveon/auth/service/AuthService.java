@@ -7,11 +7,11 @@ import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
+import com.chat.liveon.chat.service.ChatRoomService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +22,12 @@ import java.security.NoSuchAlgorithmException;
 public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final PersonRepository personRepository;
+    private final ChatRoomService chatRoomService;
 
-    public AuthService(final PasswordEncoder passwordEncoder, final PersonRepository personRepository) {
+    public AuthService(final PasswordEncoder passwordEncoder, final PersonRepository personRepository, ChatRoomService chatRoomService) {
         this.passwordEncoder = passwordEncoder;
         this.personRepository = personRepository;
+        this.chatRoomService = chatRoomService;
     }
 
     @Transactional
@@ -36,6 +38,7 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encrypt(authRequest.personId(), authRequest.personPassword());
         Person person = new Person(authRequest.personId(), authRequest.personName(), encodedPassword, Role.ROLE_USER, authRequest.profilePicture());
         personRepository.save(person);
+        chatRoomService.addUserToAllChatRooms(person);
     }
 
     @Transactional

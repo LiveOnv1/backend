@@ -2,21 +2,26 @@ package com.chat.liveon.chat.service;
 
 import com.chat.liveon.auth.entity.Person;
 import com.chat.liveon.auth.repository.PersonRepository;
+import com.chat.liveon.chat.dto.NotificationMessage;
 import com.chat.liveon.chat.dto.request.ChatMessageRequest;
 import com.chat.liveon.chat.dto.response.ChatMessageResponse;
 import com.chat.liveon.chat.entity.ChatMessage;
+import com.chat.liveon.chat.entity.ChatMessageStatus;
 import com.chat.liveon.chat.entity.ChatRoom;
 import com.chat.liveon.chat.repository.ChatMessageRepository;
+import com.chat.liveon.chat.repository.ChatMessageStatusRepository;
 import com.chat.liveon.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +32,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final PersonRepository personRepository;
+    private final ChatMessageStatusRepository chatMessageStatusRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Transactional
     public ChatMessageResponse sendMessage(Long roomId, ChatMessageRequest messageRequest) {
@@ -43,6 +50,20 @@ public class ChatMessageService {
 
         chatMessage = chatMessageRepository.save(chatMessage);
         log.info("[메시지 전송 성공] 채팅방: {}, 사용자: {}, 메시지: {}", roomId, sender.getPersonName(), messageRequest.message());
+
+        Set<Person> participants = chatRoom.getParticipants();
+        for (Person person : participants) {
+            if (!person.getPersonId().equals(sender.getPersonId())) {
+                ChatMessageStatus messageStatus = ChatMessageStatus.builder()
+                        .chatMessage(chatMessage)
+                        .person(person)
+                        .build();
+                chatMessageStatusRepository.save(messageStatus);
+                long unreadCount = chatMessageStatusRepository.countByChatMessage_ChatRoom_IdAndPerson_PersonIdAndReadFalse(roomId, person.getPersonId());
+                NotificationMessage notification = new NotificationMessage(roomId, unreadCount);
+                messagingTemplate.convertAndSend("/topic/notifications/" + person.getPersonId(), notification);
+            }
+        }
 
         return new ChatMessageResponse(
                 chatMessage.getChatRoom().getId(),
