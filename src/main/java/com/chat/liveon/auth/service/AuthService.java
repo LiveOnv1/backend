@@ -8,10 +8,10 @@ import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
 import com.chat.liveon.chat.service.ChatRoomService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +53,8 @@ public class AuthService {
         HttpSession session = request.getSession(true);
         session.setAttribute("personId", loginRequest.personId());
 
+        addCookie(response, loginRequest.personId());
+
         return new LoginResponse(loginRequest.personId(), person.get().getPersonName());
     }
 
@@ -71,5 +73,17 @@ public class AuthService {
                     }
                 })
                 .orElse(false);
+    }
+
+    private void addCookie(HttpServletResponse response, String value) {
+        ResponseCookie cookie = ResponseCookie.from("personId", value)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
+                .maxAge(2592000)
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }
