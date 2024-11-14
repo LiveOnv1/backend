@@ -8,6 +8,7 @@ import com.chat.liveon.auth.entity.Role;
 import com.chat.liveon.auth.exception.AuthenticationFailureException;
 import com.chat.liveon.auth.repository.PersonRepository;
 import com.chat.liveon.chat.service.ChatRoomService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -76,14 +77,15 @@ public class AuthService {
     }
 
     private void addCookie(HttpServletResponse response, String value) {
-        ResponseCookie cookie = ResponseCookie.from("personId", value)
-                .path("/")
-                .sameSite("None")
-                .httpOnly(false)
-                .secure(false)
-                .maxAge(2592000)
-                .build();
+        Cookie cookie = new Cookie("personId", value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
+        cookie.setMaxAge(2592000);
 
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addCookie(cookie);
+
+        String headerValue = String.format("personId=%s; Max-Age=%d; Path=/; SameSite=None", value, 2592000);
+        response.setHeader("Set-Cookie", headerValue);
     }
 }
