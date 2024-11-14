@@ -80,7 +80,7 @@ public class AuthService {
                 .path("/")
                 .sameSite("None")
                 .httpOnly(false)
-                .secure(true)
+                .secure(false)
                 .maxAge(2592000)
                 .build();
 
