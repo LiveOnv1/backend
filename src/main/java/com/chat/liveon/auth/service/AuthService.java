@@ -49,22 +49,11 @@ public class AuthService {
             throw new AuthenticationFailureException("로그인에 실패했습니다.");
         }
         Optional<Person> person = personRepository.findByPersonId(loginRequest.personId());
-        String userName = person.get().getPersonName();
 
         HttpSession session = request.getSession(true);
         session.setAttribute("personId", loginRequest.personId());
-        String sessionId = session.getId();
 
-        Cookie sessionCookie = new Cookie("JSESSIONID", sessionId);
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setPath("/");
-        sessionCookie.setMaxAge(60 * 60);
-
-        response.addCookie(sessionCookie);
-        response.setStatus(HttpServletResponse.SC_OK);
-
-
-            return new LoginResponse(loginRequest.personId(), userName);
+        return new LoginResponse(loginRequest.personId(), person.get().getPersonName());
     }
 
     @Transactional
