@@ -3,13 +3,8 @@ package com.chat.liveon.config;
 import com.chat.liveon.auth.service.PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.session.MapSession;
-import org.springframework.session.MapSessionRepository;
-import org.springframework.session.SessionRepository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -26,11 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder();
-    }
-
-    @Bean
-    public SessionRepository<MapSession> sessionRepository() {
-        return new MapSessionRepository(new ConcurrentHashMap<>());
     }
 }
 
