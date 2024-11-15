@@ -80,7 +80,7 @@ public class AuthService {
         Cookie cookie = new Cookie("personId", value);
         cookie.setPath("/");
         cookie.setHttpOnly(false);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setMaxAge(2592000);
 
         response.addCookie(cookie);
