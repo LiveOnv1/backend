@@ -77,14 +77,16 @@ public class AuthService {
     }
 
     private void addCookie(HttpServletResponse response, String value) {
-        StringBuilder cookieBuilder = new StringBuilder();
-        cookieBuilder.append(String.format("personId=%s; ", value));
-        cookieBuilder.append("Max-Age=2592000; ");
-        cookieBuilder.append("Path=/; ");
-        cookieBuilder.append("Domain=capserver.link; ");
-        cookieBuilder.append("SameSite=None; ");
-        cookieBuilder.append("Secure");
+        String headerValue = String.format("personId=%s; " +
+                        "Max-Age=%d; " +
+                        "Path=/; " +
+                        "Domain=capserver.link; " +  // www 없이 설정
+                        "SameSite=None; " +
+                        "Secure",
+                value,
+                2592000
+        );
 
-        response.setHeader("Set-Cookie", cookieBuilder.toString());
+        response.setHeader("Set-Cookie", headerValue);
     }
 }
