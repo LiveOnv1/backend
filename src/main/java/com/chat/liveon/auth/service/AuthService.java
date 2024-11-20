@@ -77,9 +77,14 @@ public class AuthService {
     }
 
     private void addCookie(HttpServletResponse response, String value) {
-        String headerValue = String.format("personId=%s; Max-Age=%d; Path=/; SameSite=None; Secure=true",
-                value,
-                2592000
-        );response.setHeader("Set-Cookie", headerValue);
+        StringBuilder cookieBuilder = new StringBuilder();
+        cookieBuilder.append(String.format("personId=%s; ", value));
+        cookieBuilder.append("Max-Age=2592000; ");
+        cookieBuilder.append("Path=/; ");
+        cookieBuilder.append("Domain=capserver.link; ");
+        cookieBuilder.append("SameSite=None; ");
+        cookieBuilder.append("Secure");
+
+        response.setHeader("Set-Cookie", cookieBuilder.toString());
     }
 }
