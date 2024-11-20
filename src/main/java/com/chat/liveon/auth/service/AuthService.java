@@ -80,7 +80,7 @@ public class AuthService {
         String headerValue = String.format("personId=%s; " +
                         "Max-Age=%d; " +
                         "Path=/; " +
-                        "Domain=capserver.link; " +  // www 없이 설정
+                        "Domain=capserver.link; " +
                         "SameSite=None; " +
                         "Secure",
                 value,
