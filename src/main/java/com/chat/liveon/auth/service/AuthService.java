@@ -54,8 +54,6 @@ public class AuthService {
         HttpSession session = request.getSession(true);
         session.setAttribute("personId", loginRequest.personId());
 
-        addCookie(response, loginRequest.personId());
-
         return new LoginResponse(loginRequest.personId(), person.get().getPersonName());
     }
 
@@ -74,19 +72,5 @@ public class AuthService {
                     }
                 })
                 .orElse(false);
-    }
-
-    private void addCookie(HttpServletResponse response, String value) {
-        String headerValue = String.format("personId=%s; " +
-                        "Max-Age=%d; " +
-                        "Path=/; " +
-                        "Domain=capserver.link; " +
-                        "SameSite=None; " +
-                        "Secure",
-                value,
-                2592000
-        );
-
-        response.setHeader("Set-Cookie", headerValue);
     }
 }
