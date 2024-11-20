@@ -77,15 +77,9 @@ public class AuthService {
     }
 
     private void addCookie(HttpServletResponse response, String value) {
-        Cookie cookie = new Cookie("personId", value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(false);
-        cookie.setSecure(true);
-        cookie.setMaxAge(2592000);
-
-        response.addCookie(cookie);
-
-        String headerValue = String.format("personId=%s; Max-Age=%d; Path=/; SameSite=None", value, 2592000);
-        response.setHeader("Set-Cookie", headerValue);
+        String headerValue = String.format("personId=%s; Max-Age=%d; Path=/; SameSite=None; Secure=true",
+                value,
+                2592000
+        );response.setHeader("Set-Cookie", headerValue);
     }
 }
