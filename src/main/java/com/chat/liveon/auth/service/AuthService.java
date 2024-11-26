@@ -44,7 +44,7 @@ public class AuthService {
     }
 
     @Transactional
-    public LoginResponse login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public LoginResponse login(LoginRequest loginRequest, HttpServletRequest request) {
         boolean isAuthenticated = authenticate(loginRequest.personId(), loginRequest.personPassword());
         if (!isAuthenticated) {
             throw new AuthenticationFailureException("로그인에 실패했습니다.");

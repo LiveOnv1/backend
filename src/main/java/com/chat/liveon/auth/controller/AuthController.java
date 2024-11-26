@@ -38,9 +38,9 @@ public class AuthController {
 
     @Operation(summary = "로그인", description = "로그인 요청")
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         log.info("[로그인 요청] 아이디: {}", loginRequest.personId());
-        LoginResponse loginResponse = authService.login(loginRequest, request, response);
+        LoginResponse loginResponse = authService.login(loginRequest, request);
         log.info("[로그인 성공] 아이디: {}", loginRequest.personId());
         return loginResponse;
     }
